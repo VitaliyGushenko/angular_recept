@@ -24,11 +24,12 @@ import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
+import { HeaderComponent } from './components/header/header.component';
 
 registerLocaleData(en);
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent],
+  declarations: [AppComponent, LoginComponent, HeaderComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

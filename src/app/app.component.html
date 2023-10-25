@@ -1,34 +1,4 @@
-<header>
-  <div class="header-content">
-    <img
-      class="logo"
-      src="https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/5X/b/d/f/f/bdff3779c851eeb7fe3c503931f038d856342392.png"
-      routerLink="/"
-      alt=""
-    />
-    <ul nz-menu nzMode="horizontal">
-      <li nz-menu-item nzSelected>Главная</li>
-      <li nz-menu-item>Рецепты</li>
-      <li nz-menu-item>Избранное</li>
-    </ul>
-    <div
-      *ngIf="(auth.isLoading$ | async) == false && (auth.user$ | async) as user"
-    >
-      {{ user.email }}
-      <button nz-button nzType="primary" (click)="auth.logOut()">Выход</button>
-    </div>
-    <button
-      nz-button
-      nzType="primary"
-      *ngIf="
-        (auth.isLoading$ | async) == false && (auth.user$ | async) === null
-      "
-      routerLink="/login"
-    >
-      Войти
-    </button>
-  </div>
-</header>
+<app-header></app-header>
 <main>
   <div class="container">
     <nz-spin nzSimple *ngIf="auth.isLoading$ | async">
