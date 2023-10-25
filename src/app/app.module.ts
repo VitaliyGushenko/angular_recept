@@ -16,7 +16,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzMessageModule } from 'ng-zorro-antd/message';
-import { LoginComponent } from './components/login/login.component';
+import { LoginComponent } from './pages/login/login.component';
 
 import { environment } from '../environments/environment';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
