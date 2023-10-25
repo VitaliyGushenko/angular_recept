@@ -25,11 +25,20 @@ import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { HeaderComponent } from './components/header/header.component';
+import { ReseptsComponent } from './pages/resepts/resepts.component';
+import { AddReceiptModalComponent } from './pages/resepts/components/add-receipt-modal/add-receipt-modal.component';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 registerLocaleData(en);
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, HeaderComponent],
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    HeaderComponent,
+    ReseptsComponent,
+    AddReceiptModalComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -43,6 +52,7 @@ registerLocaleData(en);
     NzButtonModule,
     NzSpinModule,
     NzMenuModule,
+    NzModalModule,
     provideFirebaseApp(
       () => initializeApp(environment.firebase),
       provideAuth(() => getAuth()),
