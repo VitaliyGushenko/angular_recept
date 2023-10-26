@@ -6,41 +6,49 @@ import {
   query,
   where,
   getDocs,
+  deleteDoc,
+  doc,
+  updateDoc,
 } from '@angular/fire/firestore';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ReceiptService {
-  constructor(private firestore: Firestore) {}
+  constructor(
+    private readonly _firestore: Firestore,
+    private readonly _auth: AuthService
+  ) {}
 
   async addReceipt(data: any) {
-    console.log('save');
-    try {
-      const collectionInstance = collection(this.firestore, 'recepts');
+    const collectionInstance = collection(this._firestore, 'recepts');
 
-      const res = await addDoc(collectionInstance, data)
-        .then((e) => console.log('Добавлено: ', e))
-        .catch((e) => console.log('Ошибка: ', e));
-      console.log(res);
-    } catch (e) {
-      console.error(e);
-    } finally {
-    }
+    const res = await addDoc(collectionInstance, data);
   }
 
   async getDocs() {
-    console.log('get docs');
     const b: any[] = [];
-    try {
-      const q = query(collection(this.firestore, 'recepts'));
-      const querySnapshot = await getDocs(q);
+    const q = query(collection(this._firestore, 'recepts'));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((e) => {
+      b.push({ ...e.data(), uid: e.id });
+    });
 
-      querySnapshot.forEach((e) => b.push(e.data()));
-    } catch (e) {
-      console.error(e);
-    } finally {
-    }
     return b;
+  }
+
+  async remove(uid: string) {
+    await deleteDoc(doc(this._firestore, 'recepts', uid));
+  }
+
+  async edit(receipt: any, uid: string) {
+    console.log(receipt);
+    const ref = doc(this._firestore, 'recepts', uid);
+
+    await updateDoc(ref, {
+      name: receipt.name,
+      description: receipt.description,
+    });
   }
 }

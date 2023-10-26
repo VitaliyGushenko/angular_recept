@@ -32,11 +32,15 @@ export class ReseptsComponent implements OnInit {
     try {
       this.isLoading$.next(true);
       this.receipts = await this.receiptService.getDocs();
-      console.log('this.receipts', this.receipts);
     } catch (e) {
       this._msg.error('Ошибка: ' + e);
     } finally {
       this.isLoading$.next(false);
     }
+  }
+
+  editReceipt(uid: string) {
+    const [receipt] = this.receipts.filter((e: any) => e.uid === uid);
+    this.comp?.show(receipt);
   }
 }

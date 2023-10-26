@@ -15,7 +15,7 @@ export class AddReceiptModalComponent implements OnInit {
   isVisible$ = new BehaviorSubject<boolean>(false);
   isLoading$ = new BehaviorSubject<boolean>(false);
   public form: FormGroup;
-  @Input() data: any;
+  receipt: any;
   @Output() update = new EventEmitter<void>();
 
   constructor(
@@ -24,15 +24,14 @@ export class AddReceiptModalComponent implements OnInit {
     public authService: AuthService,
     private receiptService: ReceiptService
   ) {
-    this.form = this.fb.group({
-      name: ['', [Validators.required]],
-      description: ['', [Validators.required]],
-    });
+    this.form = this.generateFormBuilder();
   }
 
   ngOnInit(): void {}
 
-  show() {
+  show(receipt?: any) {
+    this.receipt = receipt;
+    this.form = this.generateFormBuilder();
     this.isVisible$.next(true);
   }
 
@@ -40,19 +39,31 @@ export class AddReceiptModalComponent implements OnInit {
     this.isVisible$.next(false);
   }
 
+  generateFormBuilder() {
+    return this.fb.group({
+      name: [this.receipt?.name ?? '', [Validators.required]],
+      description: [this.receipt?.description ?? '', [Validators.required]],
+    });
+  }
+
   async sendForm() {
     const data = {
       ...this.form.value,
       author: this.authService.user$.value.uid,
     };
-    console.log(data);
 
     try {
       this.isLoading$.next(true);
 
-      await this.receiptService.addReceipt(data);
+      !this.receipt
+        ? await this.receiptService.addReceipt(data)
+        : await this.receiptService.edit(data, this.receipt.uid);
+      this._msg.success(
+        `Рецепт успешно ${!this.receipt ? 'добавлен' : 'изменен'} `
+      );
+
       this.update.next();
-      this._msg.success('Рецепт успешно добавлен');
+
       this.hide();
     } catch (e) {
       this._msg.error('Ошибка: ' + e);

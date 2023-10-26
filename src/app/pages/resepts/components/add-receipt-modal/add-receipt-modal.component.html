@@ -1,7 +1,7 @@
 <nz-modal
   [nzVisible]="isVisible$ | async"
   [nzFooter]="null"
-  nzTitle="Добавление рецепта"
+  [nzTitle]="!receipt ? 'Добавление ' : 'Редактирование' + ' рецепта'"
   (nzOnCancel)="hide()"
   (nzOnOk)="hide()"
 >
