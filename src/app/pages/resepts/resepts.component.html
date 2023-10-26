@@ -1,2 +1,13 @@
-<button nz-button nzType="primary" (click)="addReceipt()">Добавить рецепт</button>
-<app-add-receipt-modal></app-add-receipt-modal>
+
+<app-add-receipt-modal (update)="loadData()"></app-add-receipt-modal>
+<div class="container">
+    <div>
+        <button nz-button nzType="primary" (click)="addReceipt()">Добавить рецепт</button>
+    </div>
+    
+    <nz-spin [nzSpinning]="isLoading$ | async">
+        <ng-container *ngFor="let receipt of receipts">
+            <app-receipt-card class="receipt-card" [receipt]="receipt"></app-receipt-card>
+        </ng-container>
+    </nz-spin>
+</div>

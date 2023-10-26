@@ -1,5 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, addDoc } from '@angular/fire/firestore';
+import {
+  Firestore,
+  collection,
+  addDoc,
+  query,
+  where,
+  getDocs,
+} from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -20,5 +27,20 @@ export class ReceiptService {
       console.error(e);
     } finally {
     }
+  }
+
+  async getDocs() {
+    console.log('get docs');
+    const b: any[] = [];
+    try {
+      const q = query(collection(this.firestore, 'recepts'));
+      const querySnapshot = await getDocs(q);
+
+      querySnapshot.forEach((e) => b.push(e.data()));
+    } catch (e) {
+      console.error(e);
+    } finally {
+    }
+    return b;
   }
 }
