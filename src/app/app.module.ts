@@ -22,12 +22,17 @@ import { environment } from '../environments/environment';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
-import { FIREBASE_OPTIONS } from '@angular/fire/compat';
+import { AngularFireModule, FIREBASE_OPTIONS } from '@angular/fire/compat';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { HeaderComponent } from './components/header/header.component';
 import { ReseptsComponent } from './pages/resepts/resepts.component';
 import { AddReceiptModalComponent } from './pages/resepts/components/add-receipt-modal/add-receipt-modal.component';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import {
+  AngularFirestore,
+  AngularFirestoreModule,
+} from '@angular/fire/compat/firestore/';
 
 registerLocaleData(en);
 
@@ -53,11 +58,12 @@ registerLocaleData(en);
     NzSpinModule,
     NzMenuModule,
     NzModalModule,
-    provideFirebaseApp(
-      () => initializeApp(environment.firebase),
-      provideAuth(() => getAuth()),
-      provideFirestore(() => getFirestore())
-    ),
+    NzIconModule,
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideFirestore(() => getFirestore()),
+    AngularFireModule,
+    AngularFirestoreModule,
+    AngularFireAuthModule,
   ],
   providers: [
     {

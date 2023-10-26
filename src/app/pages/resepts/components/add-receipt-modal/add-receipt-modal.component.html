@@ -1,5 +1,58 @@
-<nz-modal [nzVisible]="isVisible$ | async" nzTitle="The first Modal" (nzOnCancel)="hide()" (nzOnOk)="hide()">
-    <ng-container *nzModalContent>
-      
-    </ng-container>
-  </nz-modal>
+<nz-modal
+  [nzVisible]="isVisible$ | async"
+  [nzFooter]="null"
+  nzTitle="Добавление рецепта"
+  (nzOnCancel)="hide()"
+  (nzOnOk)="hide()"
+>
+  <ng-container *nzModalContent>
+    <nz-spin [nzSpinning]="isLoading$ | async">
+      <form
+        nz-form
+        [formGroup]="form"
+        class="login-form"
+        (ngSubmit)="sendForm()"
+      >
+        <nz-form-item>
+          <nz-form-control nzErrorTip="Поле должно быть заполнено">
+            <nz-input-group nzPrefixIcon="user">
+              <input
+                type="text"
+                nz-input
+                formControlName="name"
+                placeholder="Название"
+              />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control nzErrorTip="Поле должно быть заполнено">
+            <nz-input-group nzPrefixIcon="lock">
+              <input
+                type="text"
+                nz-input
+                formControlName="description"
+                placeholder="Описание"
+              />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </nz-spin>
+    <div nz-col nzSpan="24" class="buttons">
+      <button nz-button nzType="default" (click)="hide()">
+        <i nz-icon nzType="close-circle" nzTheme="outline"></i>
+        <span>Отменить</span>
+      </button>
+      <button
+        (click)="sendForm()"
+        nz-button
+        nzType="primary"
+        [disabled]="!form.valid"
+      >
+        <i nz-icon [nzType]="'save'" nzTheme="outline"></i>
+        <span>Сохранить</span>
+      </button>
+    </div>
+  </ng-container>
+</nz-modal>

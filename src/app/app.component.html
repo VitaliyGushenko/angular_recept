@@ -1,7 +1,8 @@
 <app-header></app-header>
 <main>
   <div class="container">
-    <nz-spin nzSimple *ngIf="auth.isLoading$ | async">
+    <nz-spin nzSimple [nzSpinning]="auth.isLoading$ | async">
+      
     </nz-spin>
     <router-outlet></router-outlet>
   </div>
