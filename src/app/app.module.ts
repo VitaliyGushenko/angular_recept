@@ -37,6 +37,7 @@ import {
 } from '@angular/fire/compat/firestore/';
 import { ReceiptCardComponent } from './pages/resepts/components/receipt-card/receipt-card.component';
 import { EditUserModalComponent } from './components/edit-user-modal/edit-user-modal.component';
+import { ReceiptComponent } from './pages/receipt/receipt.component';
 
 registerLocaleData(en);
 
@@ -49,6 +50,7 @@ registerLocaleData(en);
     AddReceiptModalComponent,
     ReceiptCardComponent,
     EditUserModalComponent,
+    ReceiptComponent,
   ],
   imports: [
     BrowserModule,

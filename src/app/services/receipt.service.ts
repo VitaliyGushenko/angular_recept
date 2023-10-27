@@ -6,6 +6,7 @@ import {
   query,
   where,
   getDocs,
+  getDoc,
   deleteDoc,
   doc,
   updateDoc,
@@ -23,7 +24,7 @@ export class ReceiptService {
 
   async addReceipt(data: any) {
     const collectionInstance = collection(this._firestore, 'recepts');
-    const res = await addDoc(collectionInstance, data);
+    await addDoc(collectionInstance, data);
   }
 
   async getDocs() {
@@ -48,5 +49,11 @@ export class ReceiptService {
       name: receipt.name,
       description: receipt.description,
     });
+  }
+
+  async getReceipt(uid: string) {
+    const ref = doc(this._firestore, 'recepts', uid);
+    const data = await getDoc(ref);
+    return data.data();
   }
 }

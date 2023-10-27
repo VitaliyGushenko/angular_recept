@@ -101,7 +101,7 @@ export class AuthService {
 
   initAuth() {
     this.auth = getAuth();
-    if (auth) this.getUserData(this.auth.currentUser?.uid as string);
+    if (this.auth) this.getUserData(this.auth.currentUser?.uid as string);
   }
 
   async getUserData(uid: string) {
@@ -113,7 +113,6 @@ export class AuthService {
         uid: uid ?? this.auth?.currentUser?.uid,
         email: this.auth?.currentUser?.email,
       });
-      console.log('Полученный пользователь: ', this.user$.value);
     } catch (e) {
       console.error('Ошибка: ', e);
     } finally {

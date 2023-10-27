@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { BehaviorSubject } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
@@ -17,8 +18,9 @@ export class ReseptsComponent implements OnInit {
   receipts: any;
 
   constructor(
-    private receiptService: ReceiptService,
+    private readonly _receiptService: ReceiptService,
     private readonly _msg: NzMessageService,
+    private readonly _router: Router,
     public readonly authService: AuthService
   ) {}
 
@@ -27,13 +29,14 @@ export class ReseptsComponent implements OnInit {
   }
 
   addReceipt() {
-    this.comp?.show();
+    this._router.navigate(['receipt', { mode: 'edit' }]);
+    // this.comp?.show();
   }
 
   async loadData() {
     try {
       this.isLoading$.next(true);
-      this.receipts = (await this.receiptService.getDocs()).map((e) => {
+      this.receipts = (await this._receiptService.getDocs()).map((e) => {
         e.canEdit = e.author === this.authService.user$.value?.uid;
         return e;
       });
@@ -41,7 +44,12 @@ export class ReseptsComponent implements OnInit {
       this._msg.error('Ошибка: ' + e);
     } finally {
       this.isLoading$.next(false);
+      console.log(this.receipts);
     }
+  }
+
+  openReceipt(uid: string) {
+    this._router.navigate(['receipt', { uid: uid, mode: 'view' }]);
   }
 
   editReceipt(uid: string) {
