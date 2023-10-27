@@ -1,59 +1,69 @@
 <div class="container">
   <nz-spin [nzSpinning]="isLoading$ | async">
     <div class="container-info">
-      <!-- <div>Автор: {{ receipt?.authorLogin }}</div>
-      <div>Название: {{ receipt?.name }}</div>
-      <div>Описание: {{ receipt?.description }}</div> -->
       <ng-container *ngIf="viewMode; else edit">
+        <div>Автор: {{ receipt?.authorLogin }}</div>
+        <div>Название: {{ receipt?.name }}</div>
+        <div>Описание: {{ receipt?.description }}</div>
         <div class="step" *ngFor="let step of receipt?.steps; let i = index">
-            <div>
-               <strong>ШАГ {{i+1}}</strong>: {{step}}
-            </div>
-         </div>
+          <div>
+            <strong>ШАГ {{ i + 1 }}</strong
+            >: {{ step.description }}
+          </div>
+        </div>
       </ng-container>
       <ng-template #edit>
-        <!-- <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
-            <nz-form-item *ngFor="let control of listOfControl; let i = index">
-              <nz-form-label [nzXs]="24" [nzSm]="4" *ngIf="i === 0" [nzFor]="control.controlInstance">
-                Passengers
-              </nz-form-label>
-              <nz-form-control
-                [nzXs]="24"
-                [nzSm]="20"
-                [nzOffset]="i === 0 ? 0 : 4"
-                nzErrorTip="Please input passenger's name or delete this field."
-              >
+        <button nz-button style="margin-bottom: 20px" nzType="primary" (click)="addReceipt()">
+          Добавить/изменить рецепт
+        </button>
+        <form nz-form [formGroup]="form" class="login-form">
+          <nz-form-item>
+            <nz-form-control nzErrorTip="Поле должно быть заполнено">
+              <nz-input-group nzPrefixIcon="user">
                 <input
-                  class="passenger-input"
+                  type="text"
                   nz-input
-                  placeholder="placeholder"
-                  [attr.id]="control.id"
-                  [formControlName]="control.controlInstance"
+                  formControlName="name"
+                  placeholder="Название"
                 />
-                <span
-                  nz-icon
-                  nzType="minus-circle-o"
-                  class="dynamic-delete-button"
-                  (click)="removeField(control, $event)"
-                ></span>
-              </nz-form-control>
-            </nz-form-item>
-            <nz-form-item>
-              <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 20, offset: 4 }">
-                <button nz-button nzType="dashed" class="add-button" (click)="addField($event)">
-                  <span nz-icon nzType="plus"></span>
-                  Add field
-                </button>
-              </nz-form-control>
-            </nz-form-item>
-            <nz-form-item>
-              <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 20, offset: 4 }">
-                <button nz-button nzType="primary">Submit</button>
-              </nz-form-control>
-            </nz-form-item>
-          </form> -->
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-control nzErrorTip="Поле должно быть заполнено">
+              <nz-input-group nzPrefixIcon="lock">
+                <input
+                  type="text"
+                  nz-input
+                  formControlName="description"
+                  placeholder="Описание"
+                />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </form>
+
+        <button nz-button nzType="primary" (click)="addStep()">
+          Добавить шаг
+        </button>
+
+        <div class="step" *ngFor="let step of steps; let i = index">
+          <strong>ШАГ {{ i + 1 }}: </strong>
+          <div class="step-description">
+            <textarea nz-input name="" id="" [(ngModel)]="step.description">
+            </textarea>
+            <button
+              nz-button
+              nzType="primary"
+              nzDanger
+              nzShape="circle"
+              (click)="removeStep(i)"
+            >
+              <span nz-icon nzType="delete"></span>
+            </button>
+          </div>
+        </div>
       </ng-template>
-      
     </div>
   </nz-spin>
 </div>

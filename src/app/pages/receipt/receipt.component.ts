@@ -1,7 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { BehaviorSubject, map, merge, Subject } from 'rxjs';
+import { AuthService } from 'src/app/services/auth.service';
 import { ReceiptService } from 'src/app/services/receipt.service';
 // import { FormControl, FormRecord, Validators } from '@angular/forms';
 
@@ -14,21 +21,71 @@ export class ReceiptComponent implements OnInit {
   receipt: any;
   viewMode: boolean = true;
   isLoading$ = new BehaviorSubject<boolean>(false);
-  // validateForm: FormRecord<FormControl<string>> = this.fb.record({});
+  public form: FormGroup;
+
+  /**
+   * Подписка если нужно кинуть обновление данных через урл
+   */
+  private _updateUrl = new Subject<{
+    uid?: string;
+    mode: string;
+  }>();
+
+  steps: {
+    description: string;
+  }[] = [];
+
   constructor(
     private readonly _activatedRoute: ActivatedRoute,
     private readonly _receiptService: ReceiptService,
-    private readonly _msg: NzMessageService
-  ) {}
+    private readonly _msg: NzMessageService,
+    private readonly _authService: AuthService,
+    private readonly _router: Router,
+    private readonly _ref: ChangeDetectorRef,
+    private fb: FormBuilder
+  ) {
+    this.form = this.generateFormBuilder();
+  }
 
   async ngOnInit(): Promise<void> {
-    const uid = this._activatedRoute.snapshot.params['uid'];
+    merge(this._activatedRoute.queryParams, this._updateUrl).subscribe(
+      async () => {
+        console.log('SUBCSRIBE: ', this._activatedRoute.snapshot);
+        const uid = this._activatedRoute.snapshot.params['uid'];
 
-    this.viewMode = this._activatedRoute.snapshot.params['mode'] === 'view';
+        this.viewMode = this._activatedRoute.snapshot.params['mode'] === 'view';
 
+        try {
+          this.isLoading$.next(true);
+          uid && (this.receipt = await this.loadData(uid));
+        } catch (e) {
+          this._msg.error('Ошибка: ' + e);
+        } finally {
+          this.isLoading$.next(false);
+        }
+      }
+    );
+  }
+
+  async addReceipt() {
+    const data = {
+      ...this.form.getRawValue(),
+      author: this._authService.user$.value?.uid,
+      authorLogin: this._authService.user$.value?.login,
+      steps: this.steps,
+    };
+
+    // await this.receiptService.edit(data, this.receipt.uid);
     try {
       this.isLoading$.next(true);
-      uid && (this.receipt = await this.loadData(uid));
+      const uid = await this._receiptService.addReceipt(data);
+      console.log(uid);
+      this._msg.success('Рецепт успешно добавлен');
+      // this._router.navigate(['receipt', { uid: uid, mode: 'view' }]);
+      this._updateUrl.next({
+        uid: uid,
+        mode: 'view',
+      });
     } catch (e) {
       this._msg.error('Ошибка: ' + e);
     } finally {
@@ -36,7 +93,24 @@ export class ReceiptComponent implements OnInit {
     }
   }
 
+  addStep() {
+    this.steps.push({
+      description: '',
+    });
+  }
+
+  removeStep(i: number) {
+    this.steps.splice(i, 1);
+  }
+
   async loadData(uid: string) {
     return this._receiptService.getReceipt(uid);
+  }
+
+  generateFormBuilder() {
+    return this.fb.group({
+      name: ['', [Validators.required]],
+      description: ['', [Validators.required]],
+    });
   }
 }

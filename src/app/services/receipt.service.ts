@@ -24,7 +24,7 @@ export class ReceiptService {
 
   async addReceipt(data: any) {
     const collectionInstance = collection(this._firestore, 'recepts');
-    await addDoc(collectionInstance, data);
+    return (await addDoc(collectionInstance, data)).id;
   }
 
   async getDocs() {
