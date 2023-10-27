@@ -48,23 +48,29 @@ export class ReceiptComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    merge(this._activatedRoute.queryParams, this._updateUrl).subscribe(
-      async () => {
-        console.log('SUBCSRIBE: ', this._activatedRoute.snapshot);
-        const uid = this._activatedRoute.snapshot.params['uid'];
+    merge(this._activatedRoute.queryParams, this._updateUrl)
+      .pipe(
+        map((e) => ({
+          uid: e.uid,
+          mode: e.mode,
+        }))
+      )
+      .subscribe(async ({ uid, mode }) => {
+        const uidReceipt = uid ?? this._activatedRoute.snapshot.params['uid'];
 
-        this.viewMode = this._activatedRoute.snapshot.params['mode'] === 'view';
+        this.viewMode = mode
+          ? mode === 'view'
+          : this._activatedRoute.snapshot.params['mode'] === 'view';
 
         try {
           this.isLoading$.next(true);
-          uid && (this.receipt = await this.loadData(uid));
+          uidReceipt && (this.receipt = await this.loadData(uidReceipt));
         } catch (e) {
           this._msg.error('Ошибка: ' + e);
         } finally {
           this.isLoading$.next(false);
         }
-      }
-    );
+      });
   }
 
   async addReceipt() {
@@ -79,13 +85,13 @@ export class ReceiptComponent implements OnInit {
     try {
       this.isLoading$.next(true);
       const uid = await this._receiptService.addReceipt(data);
-      console.log(uid);
       this._msg.success('Рецепт успешно добавлен');
-      // this._router.navigate(['receipt', { uid: uid, mode: 'view' }]);
+
       this._updateUrl.next({
         uid: uid,
         mode: 'view',
       });
+      this._router.navigate(['receipt', { uid: uid, mode: 'view' }]);
     } catch (e) {
       this._msg.error('Ошибка: ' + e);
     } finally {
