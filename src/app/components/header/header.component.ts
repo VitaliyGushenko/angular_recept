@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { EditUserModalComponent } from '../edit-user-modal/edit-user-modal.component';
 
@@ -15,7 +16,7 @@ export class HeaderComponent implements OnInit {
    */
   public isVisibleMenu = false;
 
-  constructor(public auth: AuthService) {}
+  constructor(public auth: AuthService, public router: Router) {}
 
   showUserProfile() {
     this.comp?.show(this.auth.user$.value);

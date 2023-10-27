@@ -5,7 +5,7 @@
     [nzActions]="[actionEdit, actionDelete]"
   >
     <nz-card-meta
-      [nzTitle]="receipt.name + '(' + receipt.authorLogin +')'"
+      [nzTitle]="receipt.name + '(' + receipt.authorLogin + ')'"
       [nzDescription]="receipt.description"
       [nzAvatar]="avatarTemplate"
     ></nz-card-meta>
@@ -22,9 +22,9 @@
     />
   </ng-template>
   <ng-template #actionEdit>
-    <span nz-icon nzType="edit" (click)="edit()"></span>
+    <span nz-icon nzType="edit" *ngIf="receipt.canEdit" (click)="edit()"></span>
   </ng-template>
   <ng-template #actionDelete>
-    <span nz-icon nzType="delete" (click)="remove()"></span>
+    <span nz-icon nzType="delete" *ngIf="receipt.canEdit" (click)="remove()"></span>
   </ng-template>
 </nz-spin>

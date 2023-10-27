@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { BehaviorSubject } from 'rxjs';
+import { AuthService } from 'src/app/services/auth.service';
 import { ReceiptService } from 'src/app/services/receipt.service';
 import { AddReceiptModalComponent } from './components/add-receipt-modal/add-receipt-modal.component';
 
@@ -17,7 +18,8 @@ export class ReseptsComponent implements OnInit {
 
   constructor(
     private receiptService: ReceiptService,
-    private readonly _msg: NzMessageService
+    private readonly _msg: NzMessageService,
+    public readonly authService: AuthService
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -31,7 +33,10 @@ export class ReseptsComponent implements OnInit {
   async loadData() {
     try {
       this.isLoading$.next(true);
-      this.receipts = await this.receiptService.getDocs();
+      this.receipts = (await this.receiptService.getDocs()).map((e) => {
+        e.canEdit = e.author === this.authService.user$.value?.uid;
+        return e;
+      });
     } catch (e) {
       this._msg.error('Ошибка: ' + e);
     } finally {

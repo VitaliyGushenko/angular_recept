@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { BehaviorSubject } from 'rxjs';
+import { AuthService } from 'src/app/services/auth.service';
 import { ReceiptService } from 'src/app/services/receipt.service';
 
 @Component({

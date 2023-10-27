@@ -37,7 +37,7 @@
               </li>
       
               <li nz-menu-divider></li>
-              <li nz-menu-item (click)="auth.logOut()">
+              <li nz-menu-item (click)="auth.logOut(); router.navigate(['/'])">
                   <i nz-icon nzType="export"></i>
                   <span>Выход</span>
               </li>
