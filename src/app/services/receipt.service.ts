@@ -23,7 +23,6 @@ export class ReceiptService {
 
   async addReceipt(data: any) {
     const collectionInstance = collection(this._firestore, 'recepts');
-
     const res = await addDoc(collectionInstance, data);
   }
 
@@ -43,7 +42,6 @@ export class ReceiptService {
   }
 
   async edit(receipt: any, uid: string) {
-    console.log(receipt);
     const ref = doc(this._firestore, 'recepts', uid);
 
     await updateDoc(ref, {

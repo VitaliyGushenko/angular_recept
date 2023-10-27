@@ -12,6 +12,17 @@ import {
 import * as firebase from 'firebase/app/';
 import { auth } from 'src/environments/environment';
 import { BehaviorSubject, Observable, of } from 'rxjs';
+import {
+  addDoc,
+  collection,
+  doc,
+  Firestore,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+} from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -29,17 +40,23 @@ export class AuthService {
    */
   isLoading$ = new BehaviorSubject<boolean>(false);
 
-  constructor(public afAuth: AngularFireAuth) {
+  constructor(
+    public afAuth: AngularFireAuth,
+    private readonly _firestore: Firestore
+  ) {
     // Добавляет наблюдателя за изменениями состояния входа пользователя
-    onAuthStateChanged(auth, (user) => {
-      this.user$.next(user ?? null);
+    onAuthStateChanged(auth, async (user) => {
+      // this.user$.next(user ?? null);
+
+      user
+        ? await this.getUserData(user?.uid as string)
+        : this.user$.next(null);
+
       this.isLoading$.next(false);
-      console.log('change: ', this.user$.value, this.isLoading$.value);
     });
   }
 
   doRegister(value: any) {
-    console.log('Регистрация!!!');
     return new Promise<UserCredential>((resolve, reject) => {
       createUserWithEmailAndPassword(auth, value.email, value.password).then(
         (res) => {
@@ -51,18 +68,19 @@ export class AuthService {
     });
   }
 
+  async addUserInCollection(data: any, uid: string) {
+    await setDoc(doc(this._firestore, 'users', uid), {
+      ...data,
+    });
+  }
+
   enter(value: any) {
-    console.log('Вход!!!');
     this.isLoading$.next(true);
     return of(
       signInWithEmailAndPassword(auth, value.email, value.password)
-        .then((userCredential) => {
+        .then(async (userCredential) => {
           const user = userCredential.user;
           this.initAuth();
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
         })
         .finally(() => {
           this.isLoading$.next(false);
@@ -83,5 +101,22 @@ export class AuthService {
 
   initAuth() {
     this.auth = getAuth();
+    if (auth) this.getUserData(this.auth.currentUser?.uid as string);
+  }
+
+  async getUserData(uid: string) {
+    try {
+      const docRef = doc(this._firestore, 'users', uid);
+      const docSnap = await getDoc(docRef);
+      this.user$.next({
+        ...docSnap.data(),
+        uid: uid ?? this.auth?.currentUser?.uid,
+        email: this.auth?.currentUser?.email,
+      });
+      console.log('Полученный пользователь: ', this.user$.value);
+    } catch (e) {
+      console.error('Ошибка: ', e);
+    } finally {
+    }
   }
 }

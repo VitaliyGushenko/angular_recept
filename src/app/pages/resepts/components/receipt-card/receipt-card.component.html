@@ -5,7 +5,7 @@
     [nzActions]="[actionEdit, actionDelete]"
   >
     <nz-card-meta
-      [nzTitle]="receipt.name"
+      [nzTitle]="receipt.name + '(' + receipt.authorLogin +')'"
       [nzDescription]="receipt.description"
       [nzAvatar]="avatarTemplate"
     ></nz-card-meta>

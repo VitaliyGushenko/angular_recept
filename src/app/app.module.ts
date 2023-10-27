@@ -25,6 +25,7 @@ import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { AngularFireModule, FIREBASE_OPTIONS } from '@angular/fire/compat';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { HeaderComponent } from './components/header/header.component';
 import { ReseptsComponent } from './pages/resepts/resepts.component';
 import { AddReceiptModalComponent } from './pages/resepts/components/add-receipt-modal/add-receipt-modal.component';
@@ -35,6 +36,7 @@ import {
   AngularFirestoreModule,
 } from '@angular/fire/compat/firestore/';
 import { ReceiptCardComponent } from './pages/resepts/components/receipt-card/receipt-card.component';
+import { EditUserModalComponent } from './components/edit-user-modal/edit-user-modal.component';
 
 registerLocaleData(en);
 
@@ -46,6 +48,7 @@ registerLocaleData(en);
     ReseptsComponent,
     AddReceiptModalComponent,
     ReceiptCardComponent,
+    EditUserModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -64,6 +67,7 @@ registerLocaleData(en);
     NzIconModule,
     NzCardModule,
     NzAvatarModule,
+    NzDropDownModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
     AngularFireModule,

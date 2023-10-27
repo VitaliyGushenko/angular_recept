@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
+import { EditUserModalComponent } from '../edit-user-modal/edit-user-modal.component';
 
 @Component({
   selector: 'app-header',
@@ -7,7 +8,22 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
+  @ViewChild(EditUserModalComponent, { static: false })
+  private comp: EditUserModalComponent | undefined;
+  /**
+   * Открыто ли меню
+   */
+  public isVisibleMenu = false;
+
   constructor(public auth: AuthService) {}
 
+  showUserProfile() {
+    this.comp?.show(this.auth.user$.value);
+  }
+
   ngOnInit(): void {}
+
+  updateUser() {
+    this.auth.initAuth();
+  }
 }

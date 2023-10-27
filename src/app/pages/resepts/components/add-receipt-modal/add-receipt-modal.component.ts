@@ -50,6 +50,7 @@ export class AddReceiptModalComponent implements OnInit {
     const data = {
       ...this.form.value,
       author: this.authService.user$.value.uid,
+      authorLogin: this.authService.user$.value.login,
     };
 
     try {

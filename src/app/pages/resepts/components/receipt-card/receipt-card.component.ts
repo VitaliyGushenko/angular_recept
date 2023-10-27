@@ -38,7 +38,7 @@ export class ReceiptCardComponent implements OnInit {
           this.isLoading$.next(true);
           await this.receiptService.remove(this.receipt.uid);
           this.update.next();
-          this._msg.success('Рецепт успешно добавлен');
+          this._msg.success('Рецепт успешно удален');
         } catch (error) {
         } finally {
           this.isLoading$.next(false);

@@ -1,7 +1,7 @@
 <form nz-form [formGroup]="form" class="login-form" (ngSubmit)="sendForm()">
     <nz-form-item>
       <nz-form-control nzErrorTip="Поле должно быть заполнено и содержать корректную почту">
-        <nz-input-group nzPrefixIcon="user">
+        <nz-input-group nzPrefixIcon="mail">
           <input type="text" nz-input formControlName="email" placeholder="Почта" />
         </nz-input-group>
       </nz-form-control>

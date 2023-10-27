@@ -30,25 +30,22 @@ export class LoginComponent implements OnInit {
       password: ['', [Validators.required]],
     });
   }
-  ngOnInit(): void {
-    console.log('ЛОГИН');
-  }
+  ngOnInit(): void {}
 
   async sendForm() {
     try {
-      console.log(this.form.value);
       if (this.typeForm === TypeForm.REGISTER) {
         const data: UserCredential = await this.authService.doRegister(
           this.form.value
         );
-        console.log(data);
+        const sendData = { login: this.form.value.login };
+        this.authService.addUserInCollection(sendData, data.user.uid);
         this._msg.success('Пользователь успешно создан');
-        this.navigateHome();
       } else {
         const a = await this.authService.enter(this.form.value);
         this._msg.success('Вход выполнен успешно');
-        this.navigateHome();
       }
+      this.navigateHome();
     } catch (e: any) {
       this._msg.error('Ошибка: ', e);
     } finally {

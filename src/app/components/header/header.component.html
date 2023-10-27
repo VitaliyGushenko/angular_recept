@@ -15,8 +15,34 @@
     <div
       *ngIf="(auth.isLoading$ | async) == false && (auth.user$ | async) as user"
     >
-      {{ user.email }}
-      <button nz-button nzType="primary" (click)="auth.logOut()">Выход</button>
+    <li
+            nz-dropdown
+            [nzDropdownMenu]="userMenu"
+            nzTrigger="click"
+            nzPlacement="bottomRight"
+            class="user"
+            (nzVisibleChange)="isVisibleMenu = $event">
+            <span>{{ user.email }}</span>
+            <i nz-icon nzType="down" [nzRotate]="isVisibleMenu ? 180 : 0"></i>
+        </li>
+        <nz-dropdown-menu #userMenu="nzDropdownMenu">
+          <ul nz-menu class="user-menu">
+              <li nz-menu-item (click)="showUserProfile()">
+                  <i nz-icon nzType="user" nzTheme="outline"></i>
+                  <span>Профиль</span>
+              </li>
+              <li nz-menu-item>
+                  <i nz-icon nzType="setting"></i>
+                  <span>Настройки</span>
+              </li>
+      
+              <li nz-menu-divider></li>
+              <li nz-menu-item (click)="auth.logOut()">
+                  <i nz-icon nzType="export"></i>
+                  <span>Выход</span>
+              </li>
+          </ul>
+      </nz-dropdown-menu>
     </div>
     <button
       nz-button
@@ -30,3 +56,4 @@
     </button>
   </div>
 </header>
+<app-edit-user-modal (updateUser)="updateUser()"></app-edit-user-modal>
