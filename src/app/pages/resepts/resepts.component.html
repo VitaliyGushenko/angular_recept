@@ -1,13 +1,23 @@
-
-<!-- <app-add-receipt-modal (update)="loadData()"></app-add-receipt-modal> -->
 <div class="container">
-    <div style="margin-bottom: 20px">
-        <button nz-button nzType="primary" *ngIf="authService.user$.value?.login" (click)="addReceipt()">Добавить рецепт</button>
-    </div>
-    
-    <nz-spin [nzSpinning]="isLoading$ | async">
-        <ng-container *ngFor="let receipt of receipts">
-            <app-receipt-card class="receipt-card" [receipt]="receipt" (click)="openReceipt(receipt.uid)"></app-receipt-card>
-        </ng-container>
-    </nz-spin>
+  <div style="margin-bottom: 20px">
+    <button
+      nz-button
+      nzType="primary"
+      *ngIf="authService.user$.value?.login"
+      (click)="addReceipt()"
+    >
+      Добавить рецепт
+    </button>
+  </div>
+
+  <nz-spin [nzSpinning]="isLoading$ | async">
+    <ng-container *ngFor="let receipt of receipts">
+      <app-receipt-card
+        class="receipt-card"
+        [receipt]="receipt"
+        (click)="openReceipt(receipt.uid)"
+        (update)="loadData()"
+      ></app-receipt-card>
+    </ng-container>
+  </nz-spin>
 </div>

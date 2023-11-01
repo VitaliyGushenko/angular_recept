@@ -1,0 +1,23 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  cursor: pointer;
+  border: 0.5px solid rgba(179, 179, 179, 0.671);
+  box-sizing: border-box;
+  transition: 0.5s;
+}
+.card:hover {
+  transform: scale(1.02);
+  transition: 0.5s;
+}
+.card-image img {
+  width: 100%;
+}
+
+.card-image button {
+  position: absolute;
+  top: 2%;
+  right: 2%;
+  opacity: 0.5;
+}

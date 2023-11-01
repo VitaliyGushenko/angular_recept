@@ -30,7 +30,6 @@ export class ReseptsComponent implements OnInit {
 
   addReceipt() {
     this._router.navigate(['receipt', { mode: 'edit' }]);
-    // this.comp?.show();
   }
 
   async loadData() {
@@ -44,7 +43,6 @@ export class ReseptsComponent implements OnInit {
       this._msg.error('Ошибка: ' + e);
     } finally {
       this.isLoading$.next(false);
-      console.log(this.receipts);
     }
   }
 

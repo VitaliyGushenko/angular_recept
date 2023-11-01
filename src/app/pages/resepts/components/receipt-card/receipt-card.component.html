@@ -1,17 +1,20 @@
-<nz-spin [nzSpinning]="isLoading$ | async"
-  ><nz-card
-    style="width: 250px; cursor: pointer;"
-    [nzCover]="coverTemplate"
-  >
-    <nz-card-meta
-      [nzTitle]="receipt.name + '(' + receipt.authorLogin + ')'"
-      [nzDescription]="receipt.description"
-    ></nz-card-meta>
-  </nz-card>
-  <ng-template #coverTemplate>
-    <img
-      alt="example"
-      src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-    />
-  </ng-template>
+<nz-spin [nzSpinning]="isLoading$ | async">
+  <div class="card">
+    <div class="card-image">
+      <img
+        src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+        alt=""
+      />
+      <button *ngIf="receipt.canEdit" nz-button nzType="primary" nzShape="circle" (click)="$event.stopPropagation(); remove()" nzDanger>
+        <span nz-icon nzType="delete"></span>
+      </button>
+    </div>
+    <div class="card-info">
+      <h5 class="card-info-author">Автор: {{ receipt.authorLogin }}</h5>
+      <div class="card-info-title">
+        <strong>{{ receipt.name }}</strong>
+      </div>
+      <div class="card-info-description">{{ receipt.description }}</div>
+    </div>
+  </div>
 </nz-spin>
